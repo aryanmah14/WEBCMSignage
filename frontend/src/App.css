@@ -1,0 +1,91 @@
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.upload-container {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.media-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.media-card img,
+.media-card video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  max-height: 200px;
+  object-fit: cover;
+}
+
+.delete-btn {
+  margin-top: 10px;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: #d9363e;
+}
+
+
+/* ... existing styles ... */
+
+.signage-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signage-screen.dark {
+  color: white;
+}
+
+.fullscreen-media {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.back-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+  z-index: 1001;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
