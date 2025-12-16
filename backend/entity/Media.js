@@ -20,7 +20,7 @@ module.exports = new EntitySchema({
             nullable: true,
         },
         created_at: {
-            type: "datetime",
+            type: "timestamp",
             createDate: true, // Automatically manages created_at
         },
     },
