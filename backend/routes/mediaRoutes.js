@@ -16,6 +16,10 @@ const UploaderService = require('../services/UploaderService');
 
 // POST /upload-media
 router.post('/upload-media', upload.single('file'), async (req, res) => {
+    if (!AppDataSource.isInitialized) {
+        return res.status(500).json({ error: 'Database source is not initialized. Check your DB connection.' });
+    }
+
     try {
         if (!req.file) {
             return res.status(400).json({ error: 'No file uploaded' });
@@ -40,11 +44,18 @@ router.post('/upload-media', upload.single('file'), async (req, res) => {
             res.status(201).json(result);
         } catch (uploadError) {
             console.error('Upload error:', uploadError);
-            return res.status(500).json({ error: 'Failed to upload file to storage' });
+            return res.status(500).json({
+                error: 'Failed to upload file to storage',
+                details: uploadError.message
+            });
         }
-    } catch (err) {
+    } catch (err) { // Line 45
         console.error(err);
-        res.status(500).json({ error: 'Server error during upload' });
+        res.status(500).json({
+            error: 'Server error during upload',
+            details: err.message, // Expose internal error
+            stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+        });
     }
 });
 
