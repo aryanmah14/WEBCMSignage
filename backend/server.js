@@ -16,6 +16,9 @@ app.use(express.json());
 AppDataSource.initialize()
     .then(() => {
         console.log("Data Source has been initialized!");
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
     })
     .catch((err) => {
         console.error("Error during Data Source initialization:", err);
@@ -28,8 +31,4 @@ app.use('/api', mediaRoutes);
 
 app.get('/', (req, res) => {
     res.send('API is running...');
-});
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
 });
