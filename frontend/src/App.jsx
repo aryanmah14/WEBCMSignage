@@ -13,16 +13,37 @@ function App() {
     setRefreshTrigger(prev => prev + 1);
   };
 
+  const handleEnterSignage = () => {
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    }
+    setShowSignage(true);
+  };
+
+  const handleExitSignage = () => {
+    if (document.exitFullscreen && document.fullscreenElement) {
+      document.exitFullscreen().catch(err => {
+        console.error(`Error attempting to exit fullscreen: ${err.message}`);
+      });
+    }
+    setShowSignage(false);
+  };
+
   if (showSignage) {
-    return <SignagePlayer onBack={() => setShowSignage(false)} />;
+    return <SignagePlayer onBack={handleExitSignage} />;
   }
 
   return (
     <div className="app-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>Media Management System</h1>
-        <button onClick={() => setShowSignage(true)}>▶ Play Signage</button>
-      </div>
+      <header className="app-header">
+        <h1 className="app-title">Media Signage</h1>
+        <button className="btn-primary" onClick={handleEnterSignage}>
+          ▶ Play Signage
+        </button>
+      </header>
+
       <UploadMedia onUploadSuccess={handleUploadSuccess} />
       <hr />
       <MediaGallery refreshTrigger={refreshTrigger} />

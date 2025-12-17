@@ -1,91 +1,231 @@
+/* Layout & Container */
 .app-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  padding: 40px 20px;
 }
 
+/* Header Section */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding: 20px 30px;
+  background: rgba(30, 41, 59, 0.7);
+  /* Glassmorphism */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.app-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+}
+
+/* Primary CTA Button */
+.btn-primary {
+  background: var(--accent-gradient);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Upload Section */
 .upload-container {
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.upload-title {
+  font-size: 1.4rem;
   margin-bottom: 20px;
-  padding: 20px;
-  border: 1px solid #ddd;
+  color: var(--text-primary);
+}
+
+/* File Input Styling */
+.file-input-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.file-input-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.btn-upload {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 20px;
+  margin-left: 12px;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  transition: all 0.2s;
+}
+
+.btn-upload:hover {
+  border-color: var(--primary);
+  color: var(--text-primary);
+}
+
+.btn-submit {
+  background-color: var(--primary);
+  color: white;
+  padding: 10px 24px;
+  border-radius: 8px;
+  margin-left: 12px;
+  font-weight: 600;
+}
+
+.btn-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Gallery Grid */
+.gallery-section h3 {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+  border-bottom: 2px solid var(--bg-card);
+  padding-bottom: 10px;
+  display: inline-block;
 }
 
 .media-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
 }
 
 .media-card {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px;
-  text-align: center;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: var(--bg-card);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-.media-card img,
-.media-card video {
-  max-width: 100%;
-  height: auto;
-  border-radius: 4px;
-  max-height: 200px;
+.media-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.media-preview {
+  width: 100%;
+  aspect-ratio: 16/9;
   object-fit: cover;
+  background-color: #000;
+}
+
+/* Overlay Actions */
+.card-actions {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.8);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tag-badge {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
 }
 
 .delete-btn {
-  margin-top: 10px;
-  background-color: #ff4d4f;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  border: 1px solid transparent;
+  transition: all 0.2s;
 }
 
 .delete-btn:hover {
-  background-color: #d9363e;
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
 }
 
-
-/* ... existing styles ... */
-
+/* Signage Mode */
 .signage-screen {
+  background-color: #000;
+  width: 100vw;
+  height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-  z-index: 1000;
+  z-index: 9999;
   display: flex;
-  justify-content: center;
   align-items: center;
-}
-
-.signage-screen.dark {
-  color: white;
+  justify-content: center;
 }
 
 .fullscreen-media {
   max-width: 100%;
   max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
 .back-btn {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  background: rgba(255, 255, 255, 0.3);
-  color: white;
-  z-index: 1001;
+  top: 24px;
+  right: 24px;
+  background: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  transition: all 0.2s;
 }
 
 .back-btn:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
 }

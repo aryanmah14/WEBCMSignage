@@ -9,7 +9,7 @@ const SignagePlayer = ({ onBack }) => {
     const timerRef = useRef(null);
 
     // Configuration
-    const imageDuration = 5000; // 5 seconds for images
+    const imageDuration = 2000; // 5 seconds for images
 
     useEffect(() => {
         fetchMedia();

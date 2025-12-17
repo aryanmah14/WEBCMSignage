@@ -32,26 +32,31 @@ const MediaGallery = ({ refreshTrigger }) => {
     };
 
     return (
-        <div className="gallery-container">
-            <h3>Media Gallery</h3>
-            {loading ? <p>Loading...</p> : (
+        <div className="gallery-section">
+            <h3>Library</h3>
+            {loading ? <p>Loading content...</p> : (
                 <div className="media-grid">
                     {mediaList.map((item) => (
                         <div key={item.id} className="media-card">
                             {item.type === 'video' ? (
-                                <video src={item.url} controls width="100%" />
+                                <video src={item.url} controls className="media-preview" />
                             ) : (
-                                <img src={item.url} alt="Uploaded" width="100%" />
+                                <img src={item.url} alt="Uploaded" className="media-preview" />
                             )}
-                            <button
-                                className="delete-btn"
-                                onClick={() => handleDelete(item.id)}
-                            >
-                                Delete
-                            </button>
+
+                            <div className="card-actions">
+                                <span className="tag-badge">{item.type}</span>
+                                <button
+                                    className="delete-btn"
+                                    onClick={() => handleDelete(item.id)}
+                                    title="Delete"
+                                >
+                                    🗑️ Remove
+                                </button>
+                            </div>
                         </div>
                     ))}
-                    {mediaList.length === 0 && <p>No media found.</p>}
+                    {mediaList.length === 0 && <p style={{ color: 'var(--text-secondary)' }}>No media uploaded yet.</p>}
                 </div>
             )}
         </div>

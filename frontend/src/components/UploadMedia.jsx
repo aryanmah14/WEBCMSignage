@@ -35,19 +35,24 @@ const UploadMedia = ({ onUploadSuccess }) => {
 
     return (
         <div className="upload-container">
-            <h3>Upload Media</h3>
+            <h3 className="upload-title">Upload New Content</h3>
             <form onSubmit={handleUpload}>
-                <input
-                    id="fileInput"
-                    type="file"
-                    accept="image/*,video/*"
-                    onChange={handleFileChange}
-                />
-                <button type="submit" disabled={!file || uploading}>
-                    {uploading ? 'Uploading...' : 'Upload'}
-                </button>
+                <div className="file-input-wrapper">
+                    <button type="button" className="btn-upload">
+                        {file ? file.name : 'Choose File...'}
+                    </button>
+                    <input
+                        id="fileInput"
+                        type="file"
+                        accept="image/*,video/*"
+                        onChange={handleFileChange}
+                    />
+                    <button type="submit" className="btn-submit" disabled={!file || uploading}>
+                        {uploading ? 'Uploading...' : 'Upload Media'}
+                    </button>
+                </div>
             </form>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p style={{ color: 'var(--danger)', marginTop: '10px' }}>{error}</p>}
         </div>
     );
 };
