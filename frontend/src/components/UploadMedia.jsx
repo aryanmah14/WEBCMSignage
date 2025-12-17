@@ -47,6 +47,8 @@ const UploadMedia = ({ onUploadSuccess }) => {
                         accept="image/*,video/*"
                         onChange={handleFileChange}
                     />
+                </div>
+                <div>
                     <button type="submit" className="btn-submit" disabled={!file || uploading}>
                         {uploading ? 'Uploading...' : 'Upload Media'}
                     </button>
