@@ -75,6 +75,24 @@ router.get('/media-list', async (req, res) => {
     }
 });
 
+// GET /media/:id
+router.get('/media/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const mediaRepository = AppDataSource.getRepository("Media");
+        const media = await mediaRepository.findOneBy({ id: parseInt(id) });
+
+        if (!media) {
+            return res.status(404).json({ error: 'Media not found' });
+        }
+
+        res.json(media);
+    } catch (err) {
+        console.error('Server error fetching media by ID:', err);
+        res.status(500).json({ error: 'Server error fetching media' });
+    }
+});
+
 // DELETE /media/:id
 router.delete('/media/:id', async (req, res) => {
     const { id } = req.params;
