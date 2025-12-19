@@ -16,45 +16,51 @@ const UploaderService = require('../services/UploaderService');
 
 // POST /upload-media
 router.post('/upload-media', upload.single('file'), async (req, res) => {
-    if (!AppDataSource.isInitialized) {
-        return res.status(500).json({ error: 'Database source is not initialized. Check your DB connection.' });
-    }
-
+    let currentPhase = 'Initialization';
     try {
+        if (!AppDataSource.isInitialized) {
+            return res.status(500).json({
+                error: 'Database source is not initialized',
+                phase: currentPhase,
+                details: 'Check your DB connection settings.'
+            });
+        }
+
         if (!req.file) {
-            return res.status(400).json({ error: 'No file uploaded' });
+            return res.status(400).json({ error: 'No file uploaded', phase: 'Validation' });
         }
 
         const type = req.file.mimetype.startsWith('image/') ? 'image' : 'video';
 
-        try {
-            const { url, key } = await (type === 'image'
-                ? UploaderService.uploadImage(req.file.buffer, req.file.originalname)
-                : UploaderService.uploadFile(req.file.buffer, req.file.originalname));
+        currentPhase = 'Storage Upload';
+        console.log(`[Upload] Starting phase: ${currentPhase} for file: ${req.file.originalname}`);
 
-            // Save to DB using TypeORM
-            const mediaRepository = AppDataSource.getRepository("Media");
-            const newMedia = mediaRepository.create({
-                url,
-                type,
-                s3_key: key
-            });
-            const result = await mediaRepository.save(newMedia);
+        const { url, key } = await (type === 'image'
+            ? UploaderService.uploadImage(req.file.buffer, req.file.originalname)
+            : UploaderService.uploadFile(req.file.buffer, req.file.originalname));
 
-            res.status(201).json(result);
-        } catch (uploadError) {
-            console.error('Upload error:', uploadError);
-            return res.status(500).json({
-                error: 'Failed to upload file to storage',
-                details: uploadError.message
-            });
-        }
-    } catch (err) { // Line 45
+        currentPhase = 'Database Save';
+        console.log(`[Upload] Starting phase: ${currentPhase}`);
+
+        const mediaRepository = AppDataSource.getRepository("Media");
+        const newMedia = mediaRepository.create({
+            url,
+            type,
+            s3_key: key
+        });
+        const result = await mediaRepository.save(newMedia);
+
+        console.log('[Upload] Success');
+        res.status(201).json(result);
+    } catch (err) {
+        console.error(`[Upload] Failed during phase: ${currentPhase}`);
         console.error(err);
         res.status(500).json({
             error: 'Server error during upload',
-            details: err.message, // Expose internal error
-            stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+            phase: currentPhase,
+            message: err.message,
+            code: err.code || 'UNKNOWN_ERROR',
+            timestamp: new Date().toISOString()
         });
     }
 });
@@ -96,31 +102,35 @@ router.get('/media/:id', async (req, res) => {
 // DELETE /media/:id
 router.delete('/media/:id', async (req, res) => {
     const { id } = req.params;
+    let currentPhase = 'Initialization';
     try {
         const mediaRepository = AppDataSource.getRepository("Media");
         const media = await mediaRepository.findOneBy({ id: parseInt(id) });
 
         if (!media) {
-            return res.status(404).json({ error: 'Media not found' });
+            return res.status(404).json({ error: 'Media not found', phase: 'Validation' });
         }
 
-        // Delete from S3/MinIO
-        try {
-            await UploaderService.deleteFile(media.s3_key);
-            console.log('Deleted from storage successfully');
-        } catch (storageErr) {
-            console.error('Error deleting from storage:', storageErr);
-            // Optionally decide if we should block DB deletion if storage deletion fails
-            // For now, continuing since file might be already gone or accessible manually
-        }
+        currentPhase = 'Storage Deletion';
+        console.log(`[Delete] Starting phase: ${currentPhase} for key: ${media.s3_key}`);
+        await UploaderService.deleteFile(media.s3_key);
 
-        // Delete from DB
+        currentPhase = 'Database Deletion';
+        console.log(`[Delete] Starting phase: ${currentPhase}`);
         await mediaRepository.remove(media);
 
+        console.log('[Delete] Success');
         res.json({ message: 'Media deleted successfully' });
     } catch (err) {
-        console.error('Server error during deletion:', err);
-        res.status(500).json({ error: 'Server error deleting media' });
+        console.error(`[Delete] Failed during phase: ${currentPhase}`);
+        console.error(err);
+        res.status(500).json({
+            error: 'Server error during deletion',
+            phase: currentPhase,
+            message: err.message,
+            code: err.code || 'UNKNOWN_ERROR',
+            timestamp: new Date().toISOString()
+        });
     }
 });
 

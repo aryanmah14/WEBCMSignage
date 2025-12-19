@@ -27,7 +27,15 @@ const UploadMedia = ({ onUploadSuccess }) => {
             if (onUploadSuccess) onUploadSuccess();
         } catch (err) {
             console.error(err);
-            setError('Failed to upload media');
+            const serverError = err.response?.data?.error;
+            const phase = err.response?.data?.phase;
+            const message = err.response?.data?.message;
+
+            if (serverError && phase) {
+                setError(`Failed at ${phase}: ${message || serverError}`);
+            } else {
+                setError('Failed to upload media. Check console for details.');
+            }
         } finally {
             setUploading(false);
         }

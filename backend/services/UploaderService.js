@@ -5,19 +5,30 @@ const mime = require('mime-types');
 
 class UploaderService {
     constructor() {
-        if (!process.env.MINIO_ENDPOINT || !process.env.MINIO_ACCESS_KEY || !process.env.MINIO_SECRET_KEY) {
-            throw new Error('MinIO credentials not configured');
+        console.log('[Storage] Initializing S3 Client...');
+        const endpoint = process.env.MINIO_ENDPOINT;
+        const accessKeyId = process.env.MINIO_ACCESS_KEY;
+        const secretAccessKey = process.env.MINIO_SECRET_KEY;
+
+        if (!endpoint || !accessKeyId || !secretAccessKey) {
+            console.error('[Storage] Missing credentials:', {
+                endpoint: !!endpoint,
+                accessKey: !!accessKeyId,
+                secretKey: !!secretAccessKey
+            });
+            throw new Error('MinIO credentials (ENDPOINT, ACCESS_KEY, or SECRET_KEY) not configured');
         }
 
         this.s3Client = new S3Client({
-            region: 'us-east-1', // MinIO requires a region, usually ignored or set to us-east-1
-            endpoint: process.env.MINIO_ENDPOINT,
+            region: 'us-east-1',
+            endpoint: endpoint,
             forcePathStyle: true,
             credentials: {
-                accessKeyId: process.env.MINIO_ACCESS_KEY,
-                secretAccessKey: process.env.MINIO_SECRET_KEY,
+                accessKeyId: accessKeyId,
+                secretAccessKey: secretAccessKey,
             },
         });
+        console.log('[Storage] S3 Client Initialized for endpoint:', endpoint);
     }
 
     async uploadImage(buffer, originalName, folder = 'reports') {
