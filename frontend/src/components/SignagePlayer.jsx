@@ -19,8 +19,11 @@ const SignagePlayer = ({ onBack }) => {
     const fetchMedia = async () => {
         try {
             const { data } = await getMediaList();
+            // Filter to only play enabled media
+            const enabledMedia = data.filter(item => item.is_enabled !== false);
             console.log("Media fetched:", data);
-            setMediaItems(data);
+            console.log("Enabled media for playback:", enabledMedia);
+            setMediaItems(enabledMedia);
             setLoading(false);
         } catch (err) {
             console.error("Failed to fetch media:", err);

@@ -46,7 +46,8 @@ router.post('/upload-media', upload.single('file'), async (req, res) => {
         const newMedia = mediaRepository.create({
             url,
             type,
-            s3_key: key
+            s3_key: key,
+            is_enabled: true
         });
         const result = await mediaRepository.save(newMedia);
 
@@ -131,6 +132,27 @@ router.delete('/media/:id', async (req, res) => {
             code: err.code || 'UNKNOWN_ERROR',
             timestamp: new Date().toISOString()
         });
+    }
+});
+
+// PATCH /media/:id/toggle
+router.patch('/media/:id/toggle', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const mediaRepository = AppDataSource.getRepository("Media");
+        const media = await mediaRepository.findOneBy({ id: parseInt(id) });
+
+        if (!media) {
+            return res.status(404).json({ error: 'Media not found' });
+        }
+
+        media.is_enabled = !media.is_enabled;
+        const result = await mediaRepository.save(media);
+
+        res.json(result);
+    } catch (err) {
+        console.error('Server error toggling media status:', err);
+        res.status(500).json({ error: 'Server error toggling status' });
     }
 });
 

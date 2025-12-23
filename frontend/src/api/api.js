@@ -11,5 +11,6 @@ export const uploadMedia = (formData) => API.post('/upload-media', formData, {
 export const getMediaList = () => API.get('/media-list');
 
 export const deleteMedia = (id) => API.delete(`/media/${id}`);
+export const toggleMediaStatus = (id) => API.patch(`/media/${id}/toggle`);
 
 export default API;

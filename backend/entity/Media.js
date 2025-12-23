@@ -19,6 +19,10 @@ module.exports = new EntitySchema({
             type: "text",
             nullable: true,
         },
+        is_enabled: {
+            type: "boolean",
+            default: true,
+        },
         created_at: {
             type: "timestamp",
             createDate: true, // Automatically manages created_at
