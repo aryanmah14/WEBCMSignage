@@ -12,5 +12,6 @@ export const getMediaList = () => API.get('/media-list');
 
 export const deleteMedia = (id) => API.delete(`/media/${id}`);
 export const toggleMediaStatus = (id) => API.patch(`/media/${id}/toggle`);
+export const updateMediaDuration = (id, duration) => API.patch(`/media/${id}/duration`, { duration });
 
 export default API;

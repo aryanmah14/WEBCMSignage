@@ -9,7 +9,6 @@ const SignagePlayer = ({ onBack }) => {
     const timerRef = useRef(null);
 
     // Configuration
-    const imageDuration = 2000; // 5 seconds for images
 
     useEffect(() => {
         fetchMedia();
@@ -40,7 +39,9 @@ const SignagePlayer = ({ onBack }) => {
 
         if (currentItem.type === 'image') {
             clearTimer();
-            timerRef.current = setTimeout(nextSlide, imageDuration);
+            const duration = currentItem.duration || 3000;
+            console.log(`Setting timer for ${duration}ms`);
+            timerRef.current = setTimeout(nextSlide, duration);
         } else if (currentItem.type === 'video') {
             clearTimer();
             // Video auto-play is handled by the video element's onEnded event

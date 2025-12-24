@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getMediaList, deleteMedia, toggleMediaStatus } from '../api/api';
+import { getMediaList, deleteMedia, toggleMediaStatus, updateMediaDuration } from '../api/api';
 
 const MediaGallery = ({ refreshTrigger }) => {
     const [mediaList, setMediaList] = useState([]);
@@ -27,7 +27,7 @@ const MediaGallery = ({ refreshTrigger }) => {
             await deleteMedia(id);
             fetchMedia(); // Refresh list
         } catch (err) {
-            alert('Failed to delete media',err);
+            alert('Failed to delete media', err);
         }
     };
 
@@ -38,6 +38,18 @@ const MediaGallery = ({ refreshTrigger }) => {
         } catch (err) {
             console.error('Failed to toggle status:', err);
             alert('Failed to update status');
+        }
+    };
+
+    const handleDurationChange = async (id, newDuration) => {
+        try {
+            // Convert seconds to ms for backend
+            const ms = parseInt(newDuration) * 1000;
+            if (isNaN(ms) || ms < 1000) return; // Min 1s
+            await updateMediaDuration(id, ms);
+            fetchMedia();
+        } catch (err) {
+            console.error('Failed to update duration:', err);
         }
     };
 
@@ -73,6 +85,22 @@ const MediaGallery = ({ refreshTrigger }) => {
                                     🗑️ Remove
                                 </button>
                             </div>
+
+                            {item.type === 'image' && (
+                                <div className="duration-settings">
+                                    <label>Duration (sec):</label>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        max="60"
+                                        defaultValue={item.duration / 1000 || 3}
+                                        onBlur={(e) => handleDurationChange(item.id, e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') handleDurationChange(item.id, e.target.value);
+                                        }}
+                                    />
+                                </div>
+                            )}
                         </div>
                     ))}
                     {mediaList.length === 0 && <p style={{ color: 'var(--text-secondary)' }}>No media uploaded yet.</p>}
