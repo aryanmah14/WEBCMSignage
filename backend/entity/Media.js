@@ -23,6 +23,10 @@ module.exports = new EntitySchema({
             type: "boolean",
             default: true,
         },
+        duration: {
+            type: "int",
+            default: 3000, // Default 3 seconds
+        },
         created_at: {
             type: "timestamp",
             createDate: true, // Automatically manages created_at

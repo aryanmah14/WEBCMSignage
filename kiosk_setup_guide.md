@@ -22,6 +22,13 @@ This launches Google Chrome in a dedicated "Kiosk" mode (full screen, no address
 3.  **OS Settings (Recommended):**
     - Disable "Sleep" and "Screen Turn Off" in Power Settings.
 
+### 💡 Development Tips (How to Exit)
+If you are using your development laptop to test this, you might get "stuck" in full screen. Use these shortcuts:
+- **`Alt + F4`**: Closes the browser immediately.
+- **`Alt + Tab`**: Switches back to VS Code or other apps without closing the player.
+- **`Ctrl + Shift + Esc`**: Opens Task Manager if the browser freezes.
+- **`Win + D`**: Minimizes everything and shows the desktop.
+
 ---
 
 ## 3. Android TV Setup (Kiosk Browser)

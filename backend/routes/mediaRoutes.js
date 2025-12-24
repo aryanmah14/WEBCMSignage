@@ -47,7 +47,8 @@ router.post('/upload-media', upload.single('file'), async (req, res) => {
             url,
             type,
             s3_key: key,
-            is_enabled: true
+            is_enabled: true,
+            duration: req.body.duration ? parseInt(req.body.duration) : 3000
         });
         const result = await mediaRepository.save(newMedia);
 
@@ -153,6 +154,28 @@ router.patch('/media/:id/toggle', async (req, res) => {
     } catch (err) {
         console.error('Server error toggling media status:', err);
         res.status(500).json({ error: 'Server error toggling status' });
+    }
+});
+
+// PATCH /media/:id/duration
+router.patch('/media/:id/duration', async (req, res) => {
+    const { id } = req.params;
+    const { duration } = req.body;
+    try {
+        const mediaRepository = AppDataSource.getRepository("Media");
+        const media = await mediaRepository.findOneBy({ id: parseInt(id) });
+
+        if (!media) {
+            return res.status(404).json({ error: 'Media not found' });
+        }
+
+        media.duration = parseInt(duration) || 3000;
+        const result = await mediaRepository.save(media);
+
+        res.json(result);
+    } catch (err) {
+        console.error('Server error updating media duration:', err);
+        res.status(500).json({ error: 'Server error updating duration' });
     }
 });
 
