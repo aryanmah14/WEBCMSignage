@@ -9,6 +9,15 @@ function App() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [showSignage, setShowSignage] = useState(false);
 
+  // Auto-start signage if 'mode=player' is in URL
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('mode') === 'player') {
+      setShowSignage(true);
+      console.log("[Auto-Start] Mode 'player' detected. Bypassing manual entry.");
+    }
+  }, []);
+
   const handleUploadSuccess = () => {
     setRefreshTrigger(prev => prev + 1);
   };
