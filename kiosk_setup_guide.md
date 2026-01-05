@@ -31,7 +31,25 @@ If you are using your development laptop to test this, you might get "stuck" in 
 
 ---
 
-## 3. Android TV Setup (Kiosk Browser)
+## 3. macOS Setup (Automator App)
+macOS requires a small "applet" to launch Chrome with the correct kiosk flags on startup.
+
+1.  **Create an Applet:**
+    - Open the **Automator** app (found in Applications).
+    - Select **New Document** -> **Application**.
+    - In the search bar, type "Run Shell Script" and double-click it.
+    - Replace the text inside the box with:
+      `open -a "Google Chrome" --args --kiosk "https://signage.antino.ca/?mode=player"`
+    - Go to **File** -> **Save** and name it "Signage Player". Save it to your `Applications` folder.
+2.  **Add to Startup:**
+    - Open **System Settings** -> **General** -> **Login Items**.
+    - Click the **[+]** button and select your "Signage Player" app.
+3.  **OS Settings:**
+    - Go to **System Settings** -> **Displays** -> **Advanced** and enable **"Prevent automatic sleeping when display is off"**.
+
+---
+
+## 4. Android TV Setup (Kiosk Browser)
 Android TV browsers often block autoplay. The best way to bypass this is using a Kiosk app.
 
 1.  **Install App:** Search the Play Store for **"Fully Kiosk Browser"** or **"WallPanel"**.
@@ -42,6 +60,8 @@ Android TV browsers often block autoplay. The best way to bypass this is using a
 
 ---
 
-## 4. Why this works
-- **`?mode=player`**: We programmed the app to skip the management dashboard when this is in the URL.
-- **Muted Autoplay**: Modern browsers allow videos to play automatically only if they are muted. Our player starts muted to ensure it never stops waiting for a "tap".
+## 5. Why this works
+- **Desktop Consistency**: Since both Windows and macOS use the Chromium engine, the `?mode=player` behavior is identical. If it works on your laptop, it will work on the final display PC.
+- **`?mode=player`**: We programmed the app to skip the management dashboard and enter full-screen player mode when this is in the URL.
+- **Muted Autoplay**: Modern browsers allow videos to play automatically only if they are muted. Our player starts muted to ensure it never stops waiting for a user interaction.
+
