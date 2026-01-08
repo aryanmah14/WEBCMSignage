@@ -3,19 +3,23 @@
 To make the signage player run automatically when a computer or screen starts, follow these instructions.
 
 ## 1. Preparation
+
 Ensure your application is accessible via a URL.
 **Auto-Start URL:** `https://signage.antino.ca/?mode=player`
 
 ---
 
 ## 2. Windows Setup (Chrome Kiosk Mode)
+
 This launches Google Chrome in a dedicated "Kiosk" mode (full screen, no address bar) at startup.
 
 1.  **Create a Shortcut:**
-    - Right-click on your Desktop -> **New** -> **Shortcut**.
-    - For the location, enter:
-      `"C:\Program Files\Google\Chrome\Application\chrome.exe" --kiosk https://signage.antino.ca/?mode=player`
-    - Name it "Signage Player".
+
+- Right-click on your Desktop -> **New** -> **Shortcut**.
+  - For the location, enter:
+    `"C:\Program Files\Google\Chrome\Application\chrome.exe" --kiosk https://signage.antino.ca/?mode=player`
+  - Name it "Signage Player".
+
 2.  **Add to Startup Folder:**
     - Press `Win + R`, type `shell:startup`, and press Enter.
     - Drag your new "Signage Player" shortcut into this folder.
@@ -23,7 +27,9 @@ This launches Google Chrome in a dedicated "Kiosk" mode (full screen, no address
     - Disable "Sleep" and "Screen Turn Off" in Power Settings.
 
 ### 💡 Development Tips (How to Exit)
+
 If you are using your development laptop to test this, you might get "stuck" in full screen. Use these shortcuts:
+
 - **`Alt + F4`**: Closes the browser immediately.
 - **`Alt + Tab`**: Switches back to VS Code or other apps without closing the player.
 - **`Ctrl + Shift + Esc`**: Opens Task Manager if the browser freezes.
@@ -32,6 +38,7 @@ If you are using your development laptop to test this, you might get "stuck" in 
 ---
 
 ## 3. macOS Setup (Automator App)
+
 macOS requires a small "applet" to launch Chrome with the correct kiosk flags on startup.
 
 1.  **Create an Applet:**
@@ -50,6 +57,7 @@ macOS requires a small "applet" to launch Chrome with the correct kiosk flags on
 ---
 
 ## 4. Android TV Setup (Kiosk Browser)
+
 Android TV browsers often block autoplay. The best way to bypass this is using a Kiosk app.
 
 1.  **Install App:** Search the Play Store for **"Fully Kiosk Browser"** or **"WallPanel"**.
@@ -61,7 +69,7 @@ Android TV browsers often block autoplay. The best way to bypass this is using a
 ---
 
 ## 5. Why this works
+
 - **Desktop Consistency**: Since both Windows and macOS use the Chromium engine, the `?mode=player` behavior is identical. If it works on your laptop, it will work on the final display PC.
 - **`?mode=player`**: We programmed the app to skip the management dashboard and enter full-screen player mode when this is in the URL.
 - **Muted Autoplay**: Modern browsers allow videos to play automatically only if they are muted. Our player starts muted to ensure it never stops waiting for a user interaction.
-
